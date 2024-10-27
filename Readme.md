@@ -1,7 +1,8 @@
 # How to build
-
+```shell
 podman --build-arg QBT_VERSION=<version> -t qbittorrent-nox:<tag> -f Dockerfile
-where <version> can be a qBittorrent version number or devel.
+```
+where `<version>` can be a qBittorrent version number or devel.
 
 For version prior to 5.0.0 use Dockerfile-qt5
 
@@ -42,7 +43,7 @@ podman run -e QBT_WEBUI_PORT=<port> -p <port>:<port> \
     ```shell
     docker run --entrypoint /bin/cat --rm qbittorrentofficial/qbittorrent-nox:latest /sbom.txt
     ```
-  * Unlike LSO's version you cannot set the torrenting port when creating the container, but you can set
+  * Unlike linuxserver.io's version you cannot set the torrenting port when creating the container, but you can set
     it later in the webui
   * Map the webui port to a different port in the host system will result in Unauthroized error for security reason.
     It is therefore recommended to change the webui port via the environment variable
