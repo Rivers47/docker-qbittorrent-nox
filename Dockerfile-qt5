@@ -10,8 +10,8 @@ RUN \
     bash \
     curl \
     python3 \
-    qt6-qtbase \
-    qt6-qtbase-sqlite \
+    qt5-qtbase \
+    qt5-qtbase-sqlite \
     tzdata
 
 # image for building
@@ -39,8 +39,10 @@ RUN \
     g++ \
     ninja \
     openssl-dev \
+    qt5-qtbase-dev \
+    qt5-qttools-dev \
     qt6-qtbase-dev \
-    qt6-qttools-dev
+    qt6-qttools-dev \
 
 # compiler, linker options:
 # https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
@@ -116,7 +118,7 @@ RUN \
 
 # image for running
 FROM base
-RUN chmod 777 /downloads
+
 #RUN \
 #  adduser \
 #    -D \
