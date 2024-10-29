@@ -12,7 +12,9 @@ RUN \
     python3 \
     qt5-qtbase \
     qt5-qtbase-sqlite \
-    tzdata
+    tzdata \
+    doas \
+    dhcpcd
 
 # image for building
 FROM base AS builder
@@ -42,7 +44,7 @@ RUN \
     qt5-qtbase-dev \
     qt5-qttools-dev \
     qt6-qtbase-dev \
-    qt6-qttools-dev \
+    qt6-qttools-dev
 
 # compiler, linker options:
 # https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
@@ -119,14 +121,14 @@ RUN \
 # image for running
 FROM base
 
-#RUN \
-#  adduser \
-#    -D \
-#    -H \
-#    -s /sbin/nologin \
-#    -u 1000 \
-#    qbtUser && \
-#  echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
+RUN \
+  adduser \
+    -D \
+    -H \
+    -s /sbin/nologin \
+    -u 1000 \
+    qbtUser && \
+  echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
 
 COPY --from=builder /usr/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
 

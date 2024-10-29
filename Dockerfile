@@ -9,10 +9,12 @@ RUN \
   apk --no-cache add \
     bash \
     curl \
+    doas \
     python3 \
     qt6-qtbase \
     qt6-qtbase-sqlite \
-    tzdata
+    tzdata \
+    dhcpcd
 
 # image for building
 FROM base AS builder
@@ -116,15 +118,14 @@ RUN \
 
 # image for running
 FROM base
-RUN chmod 777 /downloads
-#RUN \
-#  adduser \
-#    -D \
-#    -H \
-#    -s /sbin/nologin \
-#    -u 1000 \
-#    qbtUser && \
-#  echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
+RUN \
+  adduser \
+    -D \
+    -H \
+    -s /sbin/nologin \
+    -u 1000 \
+    qbtUser && \
+  echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
 
 COPY --from=builder /usr/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
 
