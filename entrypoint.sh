@@ -29,14 +29,12 @@ if [ ! -f "$qbtConfigFile" ]; then
 Session\DefaultSavePath=$downloadsPath
 Session\Port=6881
 Session\TempPath=$downloadsPath/temp
-
-[LegalNotice]
-Accepted=false
 EOF
 fi
 
-_legalNotice=$(echo "$QBT_LEGAL_NOTICE" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
-sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1true|}}' "$qbtConfigFile"
+confirmLegalNotice="--confirm-legal-notice"
+
+>>>>>>> upstream/main
 if [ -z "$QBT_WEBUI_PORT" ]; then
     QBT_WEBUI_PORT=8080
 fi
@@ -52,6 +50,7 @@ fi
 exec \
     doas -u qbtUser \
         qbittorrent-nox \
+            "$confirmLegalNotice" \
             --profile="$profilePath" \
             --webui-port="$QBT_WEBUI_PORT" \
             "$@"
