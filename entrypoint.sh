@@ -41,15 +41,6 @@ if [ -z "$QBT_WEBUI_PORT" ]; then
     QBT_WEBUI_PORT=8080
 fi
 
-# those are owned by root by default
-# don't change existing files owner in `$downloadsPath`
-if [ -d "$downloadsPath" ]; then
-    chown qbtUser:qbtUser "$downloadsPath"
-fi
-if [ -d "$profilePath" ]; then
-    chown qbtUser:qbtUser -R "$profilePath"
-fi
-
 # set umask just before starting qbt
 if [ -n "$UMASK" ]; then
     umask "$UMASK"
