@@ -10,13 +10,15 @@ RUN \
     7zip \
     bash \
     curl \
+    doas \
     libcrypto3 \
     libssl3 \
     python3 \
     qt6-qtbase \
     qt6-qtbase-sqlite \
+    zlib \
     tzdata \
-    zlib
+    dhcpcd
 
 # image for building
 FROM base AS builder
@@ -25,7 +27,7 @@ ARG QBT_VERSION \
     BOOST_VERSION_MAJOR="1" \
     BOOST_VERSION_MINOR="86" \
     BOOST_VERSION_PATCH="0" \
-    LIBBT_VERSION="RC_1_2" \
+    LIBBT_VERSION="RC_2_0" \
     LIBBT_CMAKE_FLAGS=""
 
 # check environment variables
@@ -62,10 +64,7 @@ ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_
 RUN \
   wget -O boost.tar.gz "https://archives.boost.io/release/$BOOST_VERSION_MAJOR.$BOOST_VERSION_MINOR.$BOOST_VERSION_PATCH/source/boost_${BOOST_VERSION_MAJOR}_${BOOST_VERSION_MINOR}_${BOOST_VERSION_PATCH}.tar.gz" && \
   tar -xf boost.tar.gz && \
-  mv boost_* boost && \
-  cd boost && \
-  ./bootstrap.sh && \
-  ./b2 stage --stagedir=./ --with-headers
+  mv boost_* boost
 
 # build libtorrent
 RUN \
@@ -83,7 +82,7 @@ RUN \
     -DCMAKE_CXX_STANDARD=20 \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
-    -DBOOST_ROOT=/boost/lib/cmake \
+    -DBOOST_ROOT=/boost \
     -Ddeprecated-functions=OFF \
     $LIBBT_CMAKE_FLAGS && \
   cmake --build build -j $(nproc) && \
@@ -108,7 +107,7 @@ RUN \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
-    -DBOOST_ROOT=/boost/lib/cmake \
+    -DBOOST_ROOT=/boost \
     -DGUI=OFF && \
   cmake --build build -j $(nproc) && \
   cmake --install build
@@ -136,15 +135,14 @@ RUN \
 
 # image for running
 FROM base
-RUN chmod 777 /downloads
-#RUN \
-#  adduser \
-#    -D \
-#    -H \
-#    -s /sbin/nologin \
-#    -u 1000 \
-#    qbtUser && \
-#  echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
+RUN \
+  adduser \
+    -D \
+    -H \
+    -s /sbin/nologin \
+    -u 1000 \
+    qbtUser && \
+  echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
 
 COPY --from=builder /usr/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
 
