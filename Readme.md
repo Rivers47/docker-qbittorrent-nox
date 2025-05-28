@@ -1,6 +1,6 @@
 # How to build
 ```shell
-podman --build-arg QBT_VERSION=<version> -t qbittorrent-nox:<tag> -f Dockerfile
+podman build --build-arg QBT_VERSION=<version> -t qbittorrent-nox:<tag> -f Dockerfile
 ```
 where `<version>` can be a qBittorrent version number or devel.
 
