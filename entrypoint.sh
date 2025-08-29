@@ -49,6 +49,7 @@ fi
 exec \
     doas -u qbtUser \
         qbittorrent-nox \
+			"$confirmLegalNotice" \
             --profile="$profilePath" \
             --webui-port="$QBT_WEBUI_PORT" \
             "$@"
