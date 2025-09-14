@@ -1,0 +1,56 @@
+# action.yml
+name: "Build image"
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/README.md'
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: "qbittorrent-macvlan"
+  IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
+  QBT_VERSION: "5.1.2"
+  LIBBT_VERSION: "RC_2.0"
+jobs:
+  build:
+    name: Build image
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Buildah Action
+      uses: redhat-actions/buildah-build@v2
+      with:
+        base-image: docker.io/fabric8/java-alpine-openjdk11-jre
+        image: my-new-image
+        tags: v1
+        content: |
+          target/spring-petclinic-2.3.0.BUILD-SNAPSHOT.jar
+        entrypoint: java -jar spring-petclinic-2.3.0.BUILD-SNAPSHOT.jar
+        port: 8080
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Push To GHCR
+      uses: redhat-actions/push-to-registry@v2
+      if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      id: push
+      env:
+        REGISTRY_USER: ${{ github.actor }}
+        REGISTRY_PASSWORD: ${{ github.token }}
+      with:
+        #registry: ${{ env.IMAGE_REGISTRY }}
+        image: ${{ env.IMAGE_NAME }}
+        tags: ${{env.QBT_VERSION}} ${{ github.sha }}
+        username: ${{ env.REGISTRY_USER }}
+        password: ${{ env.REGISTRY_PASSWORD }}
