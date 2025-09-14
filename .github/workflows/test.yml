@@ -22,6 +22,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Prepare environment
+      run: |
+        # Lowercase the image uri
+        echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> ${GITHUB_ENV}
+        echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
+
     - uses: actions/checkout@v5
 
     - name: Buildah Action
@@ -45,7 +51,7 @@ jobs:
         REGISTRY_USER: ${{ github.actor }}
         REGISTRY_PASSWORD: ${{ github.token }}
       with:
-        #registry: ${{ env.IMAGE_REGISTRY }}
+        registry: ${{ env.IMAGE_REGISTRY }}
         image: my-new-image
         tags: v1
         username: ${{ env.REGISTRY_USER }}

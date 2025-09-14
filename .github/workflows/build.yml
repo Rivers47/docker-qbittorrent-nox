@@ -1,14 +1,14 @@
 # action.yml
 name: "Build image"
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**/README.md'
+  #pull_request:
+  #  branches:
+  #    - main
+  #push:
+  #  branches:
+  #    - main
+  #  paths-ignore:
+  #    - '**/README.md'
   workflow_dispatch:
 
 env:
