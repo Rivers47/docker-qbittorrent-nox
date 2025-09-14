@@ -1,5 +1,5 @@
 # action.yml
-name: "Build image"
+name: "test upload"
 on:
   pull_request:
     branches:
