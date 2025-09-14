@@ -50,7 +50,7 @@ jobs:
         REGISTRY_USER: ${{ github.actor }}
         REGISTRY_PASSWORD: ${{ github.token }}
       with:
-        registry: ${{ env.IMAGE_REGISTRY }}
+        #registry: ${{ env.IMAGE_REGISTRY }}
         image: ${{ env.IMAGE_NAME }}
         tags: ${{env.QBT_VERSION}} ${{ github.sha }}
         username: ${{ env.REGISTRY_USER }}
