@@ -1,9 +1,10 @@
 #!/bin/sh
 
 if [ -n "$RUN_DHCPCD" ]; then
-	if [ -n "$DUID" ]; then
-		echo "$DUID" > /var/lib/dhcpcd/duid
-	fi
+#	Use bind mount to put the duid file in instead
+#	if [ -n "$DUID" ]; then
+#		echo "$DUID" > /var/lib/dhcpcd/duid
+#	fi
 	dhcpcd
 fi
 
