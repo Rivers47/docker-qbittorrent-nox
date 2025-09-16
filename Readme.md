@@ -1,3 +1,6 @@
+# Intro
+This is a personal build for using qbit with macvlan. This is so that you can run multiple instances of qbit on the same machine while also having ipv6 from your router, so you can set up port forwarding on your router.
+
 # How to build
 ```shell
 podman build --build-arg QBT_VERSION=<version> -t qbittorrent-nox:<tag> -f Dockerfile
