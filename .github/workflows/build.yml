@@ -30,7 +30,13 @@ jobs:
         echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> ${GITHUB_ENV}
         echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
     - uses: actions/checkout@v5
-
+    - name: Image Metadata
+      uses: docker/metadata-action@v5
+      id: metadata
+      with:
+        labels: |
+          org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/blob/main/Containerfile
+          org.opencontainers.image.title=${{ env.IMAGE_NAME }}
     - name: Buildah Action
       uses: redhat-actions/buildah-build@v2
       with:
