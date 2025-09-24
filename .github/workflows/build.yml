@@ -60,6 +60,6 @@ jobs:
       with:
         registry: ${{ env.IMAGE_REGISTRY }}
         image: ${{ env.IMAGE_NAME }}
-        tags: ${{env.QBT_VERSION}} ${{ github.sha }}
+        tags: ${{env.QBT_VERSION}}-${{matrix.LIBT}}
         username: ${{ env.REGISTRY_USER }}
         password: ${{ env.REGISTRY_PASSWORD }}
