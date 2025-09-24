@@ -20,7 +20,9 @@ jobs:
   build:
     name: Build image
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        LIBT: ["RC_2_0", "RC_1_2"]
     steps:
     - name: Prepare environment
       run: |
@@ -33,11 +35,12 @@ jobs:
       uses: redhat-actions/buildah-build@v2
       with:
         image: ${{env.IMAGE_NAME}}
-        tags: ${{env.QBT_VERSION}} ${{ github.sha }}
+        tags: ${{env.QBT_VERSION}}-${{matrix.LIBT}}
         containerfiles: |
           ./Containerfile
         build-args: |
           QBT_VERSION=${{env.QBT_VERSION}}
+          LIBBT_VERSION=${{matrix.LIBT}}
         oci: true
 
     - name: Login to GitHub Container Registry
