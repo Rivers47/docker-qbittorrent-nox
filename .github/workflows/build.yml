@@ -46,7 +46,7 @@ jobs:
           ./Containerfile
         build-args: |
           QBT_VERSION=${{env.QBT_VERSION}}
-          LIBBT_VERSION=${{matrix.LIBT}}
+          LIBBT_VERSION=${{matrix.LIBT//./\/}}
         oci: true
 
     - name: Login to GitHub Container Registry
