@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        LIBT: ["RC_2.0", "RC_1.2"]
+        LIBT: ["RC_2_0", "RC_1_2"]
     steps:
     - name: Prepare environment
       run: |
@@ -46,7 +46,7 @@ jobs:
           ./Containerfile
         build-args: |
           QBT_VERSION=${{env.QBT_VERSION}}
-          LIBBT_VERSION=${{matrix.LIBT\/\.\/\/}}
+          LIBBT_VERSION=${{matrix.LIBT}}
         oci: true
 
     - name: Login to GitHub Container Registry
